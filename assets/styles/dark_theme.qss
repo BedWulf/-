@@ -1,0 +1,132 @@
+/* ============================================================
+   ЛитейныйЦех PRO — тёмная тема (бордо + золото)
+   ============================================================ */
+
+QMainWindow {
+    background-color: #2D0A0A;
+}
+
+QWidget {
+    color: #F4D03F;
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+QLabel {
+    color: #F4D03F;
+}
+
+QLabel[secondary="true"] {
+    color: #C9A84C;
+}
+
+/* --- Поля ввода --- */
+QLineEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    background-color: #3A1010;
+    color: #F4D03F;
+    border: 1px solid #B87333;
+    border-radius: 4px;
+    padding: 6px 10px;
+    selection-background-color: #FF6B35;
+}
+QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
+    border: 1px solid #FF6B35;
+}
+
+/* --- Таблицы --- */
+QTableWidget, QTableView {
+    background-color: #3A1010;
+    alternate-background-color: #4A1515;
+    color: #F4D03F;
+    gridline-color: #B87333;
+    border: 1px solid #B87333;
+    selection-background-color: #FF6B35;
+}
+QHeaderView::section {
+    background-color: #4A1515;
+    color: #F4D03F;
+    padding: 6px;
+    border: 1px solid #B87333;
+    font-weight: bold;
+}
+
+/* --- Кнопки --- */
+QPushButton {
+    background-color: #FF6B35;
+    color: #2D0A0A;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: #FF8555;
+}
+QPushButton:pressed {
+    background-color: #D95520;
+}
+QPushButton:disabled {
+    background-color: #6B2525;
+    color: #C9A84C;
+}
+
+/* --- Вкладки --- */
+QTabWidget::pane {
+    border: 1px solid #B87333;
+    background-color: #2D0A0A;
+}
+QTabBar::tab {
+    background-color: #4A1515;
+    color: #C9A84C;
+    padding: 8px 16px;
+    border: 1px solid #B87333;
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+QTabBar::tab:selected {
+    background-color: #FF6B35;
+    color: #2D0A0A;
+    font-weight: bold;
+}
+
+/* --- Полосы прокрутки --- */
+QScrollBar:vertical {
+    background-color: #2D0A0A;
+    width: 12px;
+}
+QScrollBar::handle:vertical {
+    background-color: #B87333;
+    border-radius: 6px;
+    min-height: 20px;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+/* --- Группы --- */
+QGroupBox {
+    border: 1px solid #B87333;
+    border-radius: 6px;
+    margin-top: 12px;
+    padding-top: 16px;
+    font-weight: bold;
+    color: #FF6B35;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 12px;
+    padding: 0 6px;
+}
+
+/* --- Разделители --- */
+QFrame[frameShape="4"], QFrame[frameShape="5"] {
+    color: #B87333;
+    max-height: 2px;
+}
+
+/* --- Статус-бар --- */
+QStatusBar {
+    background-color: #4A1515;
+    color: #C9A84C;
+    border-top: 1px solid #B87333;
+}
