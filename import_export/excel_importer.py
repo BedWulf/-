@@ -1,0 +1,425 @@
+# -*- coding: utf-8 -*-
+"""
+excel_importer.py
+=================
+Модуль импорта номенклатуры отливок из Excel-файла (casting_production_v4.xlsx).
+
+Структура файла (по ТЗ):
+    Строки 1-3 — заголовки/пояснения (пропускаются)
+    Строка 4+  — данные отливок
+
+Колонки:
+    A — № п/п
+    B — Наименование отливки
+    C — Масса с ЛПС, кг
+    D — Габарит, мм (диаметр Ø или Д×Ш)
+    E — Высота, мм
+    F — Годовая программа (шт. с учётом брака)
+    G — Количество отливок в форме
+    H — [ВЫЧИСЛЯЕМОЕ] Масса заливаемого металла в год, т
+    I — Опока: длина, мм
+    J — Опока: ширина, мм
+    K — Опока: высота, мм
+    L — Заливочная масса, кг
+    M — [ВЫЧИСЛЯЕМОЕ] Масса металла в год (по заливу), т
+    N — Объём формовочной и стержневой смеси, м³
+    O — [ВЫЧИСЛЯЕМОЕ]
+    P — Тип формовочной машины
+"""
+
+from __future__ import annotations
+
+import logging
+import re
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Optional, Tuple
+
+import openpyxl
+from openpyxl.utils import get_column_letter
+
+# Локальные импорты
+from core.casting_item import CastingItem
+
+logger = logging.getLogger(__name__)
+
+
+# ---------------------------------------------------------------------------
+# Исключения
+# ---------------------------------------------------------------------------
+class ImportError_(Exception):
+    """Базовое исключение для ошибок импорта."""
+    pass
+
+
+class FileNotExistsError(ImportError_):
+    pass
+
+
+class InvalidFormatError(ImportError_):
+    pass
+
+
+class EmptyDataError(ImportError_):
+    pass
+
+
+# ---------------------------------------------------------------------------
+# Вспомогательные функции парсинга
+# ---------------------------------------------------------------------------
+def _parse_dimension(value) -> Tuple[float, Optional[float]]:
+    """
+    Парсит габарит из ячейки.
+    Поддерживает форматы:
+        - 'Ø180'      → (180.0, None)      — цилиндрическая отливка
+        - '130x150'   → (130.0, 150.0)     — прямоугольная
+        - '130х150'   → (130.0, 150.0)     — русская 'х'
+        - '180'       → (180.0, None)
+    Возвращает: (основной_размер, второй_размер)
+    """
+    if value is None:
+        return (0.0, None)
+
+    s = str(value).strip().replace(" ", "")
+    if not s:
+        return (0.0, None)
+
+    # Ø180 / Ø 180 / ⌀180
+    m = re.match(r"[Ø⌀∅]\s*([\d.,]+)", s)
+    if m:
+        return (float(m.group(1).replace(",", ".")), None)
+
+    # 130x150 / 130х150 / 130*150
+    m = re.match(r"([\d.,]+)[xх×*]([\d.,]+)", s)
+    if m:
+        return (
+            float(m.group(1).replace(",", ".")),
+            float(m.group(2).replace(",", ".")),
+        )
+
+    # Просто число
+    try:
+        return (float(s.replace(",", ".")), None)
+    except ValueError:
+        logger.warning(f"Не удалось распарсить габарит: '{s}'")
+        return (0.0, None)
+
+
+def _parse_flask(value) -> Tuple[float, float, float]:
+    """
+    Парсит размеры опоки из ячейки.
+    Формат: '900x600x200' / '900x600x200/200' (последнее игнорируем — высота одна)
+    Возвращает: (длина, ширина, высота)
+    """
+    if value is None:
+        return (0.0, 0.0, 0.0)
+
+    s = str(value).strip().replace(" ", "")
+    # Убираем дробную часть высоты (200/200 → 200)
+    s = re.sub(r"/\d+", "", s)
+
+    parts = re.split(r"[xх×*]", s)
+    if len(parts) >= 3:
+        try:
+            return (
+                float(parts[0].replace(",", ".")),
+                float(parts[1].replace(",", ".")),
+                float(parts[2].replace(",", ".")),
+            )
+        except ValueError:
+            pass
+
+    logger.warning(f"Не удалось распарсить размеры опоки: '{s}'")
+    return (0.0, 0.0, 0.0)
+
+
+def _safe_float(value, default: float = 0.0) -> float:
+    """Безопасное преобразование в float."""
+    if value is None:
+        return default
+    try:
+        s = str(value).strip().replace(",", ".")
+        return float(s) if s else default
+    except (ValueError, TypeError):
+        return default
+
+
+def _safe_int(value, default: int = 0) -> int:
+    """Безопасное преобразование в int."""
+    if value is None:
+        return default
+    try:
+        s = str(value).strip()
+        return int(float(s)) if s else default
+    except (ValueError, TypeError):
+        return default
+
+
+# ---------------------------------------------------------------------------
+# Результат предпросмотра
+# ---------------------------------------------------------------------------
+@dataclass
+class ImportPreview:
+    """
+    Структура для передачи данных в диалог предпросмотра.
+    Содержит сырые строки до создания CastingItem — чтобы пользователь мог
+    увидеть и отклонить некорректные данные.
+    """
+    file_path: Path
+    headers: List[str]
+    rows: List[List]                # сырые данные для таблицы предпросмотра
+    castings: List[CastingItem]     # готовые объекты
+    warnings: List[str]             # предупреждения (пустые ячейки, странные значения)
+
+    @property
+    def total_castings(self) -> int:
+        return len(self.castings)
+
+    @property
+    def total_forms_per_year(self) -> int:
+        return sum(c.forms_per_year for c in self.castings)
+
+    @property
+    def total_metal_tons(self) -> float:
+        """Общая масса заливаемого металла в год, тонн."""
+        return sum(c.metal_mass_year_tons for c in self.castings)
+
+
+# ---------------------------------------------------------------------------
+# Основной класс импортера
+# ---------------------------------------------------------------------------
+class ExcelImporter:
+    """
+    Импортер номенклатуры отливок из Excel.
+
+    Использование:
+        importer = ExcelImporter()
+        preview = importer.load_preview(Path("casting_production_v4.xlsx"))
+        # ... показать preview в диалоге ...
+        if user_confirmed:
+            importer.apply_to_project(preview, project)
+    """
+
+    # Индексы колонок (0-based для openpyxl после чтения в list)
+    COL_NUM       = 0   # A — №
+    COL_NAME      = 1   # B — Наименование
+    COL_MASS_LPS  = 2   # C — Масса с ЛПС, кг
+    COL_DIM       = 3   # D — Габарит
+    COL_HEIGHT    = 4   # E — Высота
+    COL_PROG      = 5   # F — Годовая программа
+    COL_IN_FORM   = 6   # G — Кол-во в форме
+    # COL_H       = 7   # H — [ВЫЧИСЛЯЕМОЕ]
+    COL_FLASK_L   = 8   # I — Опока: длина
+    COL_FLASK_W   = 9   # J — Опока: ширина
+    COL_FLASK_H   = 10  # K — Опока: высота
+    COL_POUR_MASS = 11  # L — Заливочная масса, кг
+    # COL_M       = 12  # M — [ВЫЧИСЛЯЕМОЕ]
+    COL_MIX_VOL   = 13  # N — Объём смеси, м³
+    # COL_O       = 14  # O — [ВЫЧИСЛЯЕМОЕ]
+    COL_MACHINE   = 15  # P — Тип машины
+
+    MIN_COLS = 16  # до колонки P включительно
+
+    DATA_START_ROW = 4  # данные начинаются со строки 4 (1-based в Excel)
+
+    HEADERS = [
+        "№", "Наименование", "Масса с ЛПС, кг", "Габарит, мм",
+        "Высота, мм", "Год. программа, шт", "В форме, шт",
+        "Металл/год, т",
+        "Опока L, мм", "Опока W, мм", "Опока H, мм",
+        "Залив. масса, кг", "Металл (зал.) т/год",
+        "Объём смеси, м³", "—", "Тип машины",
+    ]
+
+    def __init__(self):
+        self._warnings: List[str] = []
+
+    # ------------------------------------------------------------------
+    # Публичные методы
+    # ------------------------------------------------------------------
+    def load_preview(self, file_path: Path) -> ImportPreview:
+        """
+        Загружает файл и формирует предпросмотр.
+        НЕ модифицирует project — только читает файл.
+        """
+        file_path = Path(file_path)
+        if not file_path.exists():
+            raise FileNotExistsError(f"Файл не найден: {file_path}")
+
+        if file_path.suffix.lower() not in (".xlsx", ".xlsm"):
+            raise InvalidFormatError(
+                f"Неподдерживаемый формат: {file_path.suffix}. "
+                "Требуется .xlsx или .xlsm"
+            )
+
+        self._warnings = []
+        wb = openpyxl.load_workbook(file_path, data_only=True, read_only=True)
+        ws = wb.active
+
+        try:
+            rows_data = list(ws.iter_rows(
+                min_row=self.DATA_START_ROW,
+                values_only=True,
+            ))
+        finally:
+            wb.close()
+
+        if not rows_data:
+            raise EmptyDataError(
+                f"В файле нет данных. Ожидалось начало со строки "
+                f"{self.DATA_START_ROW}"
+            )
+
+        castings: List[CastingItem] = []
+        preview_rows: List[List] = []
+
+        for row_num, row in enumerate(rows_data, start=self.DATA_START_ROW):
+            # Пропускаем полностью пустые строки
+            if all(cell is None or str(cell).strip() == "" for cell in row):
+                continue
+
+            # Проверка минимального количества колонок
+            if len(row) < self.MIN_COLS:
+                self._warnings.append(
+                    f"Строка {row_num}: недостаточно колонок "
+                    f"({len(row)} < {self.MIN_COLS}). Пропущена."
+                )
+                continue
+
+            casting, preview_row = self._parse_row(row, row_num)
+            if casting is not None:
+                castings.append(casting)
+                preview_rows.append(preview_row)
+
+        if not castings:
+            raise EmptyDataError(
+                "Не удалось прочитать ни одной корректной записи. "
+                "Проверьте структуру файла."
+            )
+
+        return ImportPreview(
+            file_path=file_path,
+            headers=self.HEADERS,
+            rows=preview_rows,
+            castings=castings,
+            warnings=self._warnings.copy(),
+        )
+
+    def apply_to_project(self, preview: ImportPreview, project) -> None:
+        """
+        Заменяет номенклатуру в project на импортированную.
+        Эмитит сигнал params_changed.
+        """
+        project.castings = preview.castings
+        project.source_file = str(preview.file_path)
+
+        # Пересчитываем суммарные поля проекта
+        project.recalc_totals()
+
+        # Сигналим GUI о необходимости обновления всех вкладок
+        if hasattr(project, "params_changed"):
+            project.params_changed.emit()
+
+        logger.info(
+            f"Импортировано {preview.total_castings} позиций, "
+            f"{preview.total_forms_per_year} форм/год, "
+            f"{preview.total_metal_tons:.1f} т металла/год"
+        )
+
+    # ------------------------------------------------------------------
+    # Внутренние методы
+    # ------------------------------------------------------------------
+    def _parse_row(
+        self, row: tuple, row_num: int
+    ) -> Tuple[Optional[CastingItem], Optional[List]]:
+        """
+        Парсит одну строку Excel.
+        Возвращает: (CastingItem | None, preview_row | None)
+        """
+        # --- Обязательные поля ---
+        num = _safe_int(row[self.COL_NUM])
+        name = str(row[self.COL_NAME] or "").strip()
+
+        if not name:
+            self._warnings.append(
+                f"Строка {row_num}: пустое наименование. Пропущена."
+            )
+            return (None, None)
+
+        mass_lps = _safe_float(row[self.COL_MASS_LPS])
+        height = _safe_float(row[self.COL_HEIGHT])
+        forms_per_year = _safe_int(row[self.COL_PROG])
+        in_form = _safe_int(row[self.COL_IN_FORM]) or 1
+        pour_mass = _safe_float(row[self.COL_POUR_MASS])
+        mix_volume = _safe_float(row[self.COL_MIX_VOL])
+        machine = str(row[self.COL_MACHINE] or "").strip()
+
+        # --- Габарит ---
+        dim1, dim2 = _parse_dimension(row[self.COL_DIM])
+        if dim1 == 0.0:
+            self._warnings.append(
+                f"Строка {row_num} ({name}): не распознан габарит "
+                f"'{row[self.COL_DIM]}'"
+            )
+
+        # --- Опока ---
+        flask_l, flask_w, flask_h = _parse_flask(
+            f"{row[self.COL_FLASK_L]}x{row[self.COL_FLASK_W]}x{row[self.COL_FLASK_H]}"
+        )
+        if flask_l == 0 or flask_w == 0:
+            self._warnings.append(
+                f"Строка {row_num} ({name}): не распознаны размеры опоки"
+            )
+
+        # --- Вычисляемые поля ---
+        # Масса заливаемого металла в год, тонн
+        # = (заливочная масса × годовая программа) / 1000
+        # Если заливочная масса не указана — берём массу с ЛПС
+        effective_pour_mass = pour_mass if pour_mass > 0 else mass_lps
+        metal_year_tons = (effective_pour_mass * forms_per_year) / 1000.0
+
+        # Количество отливок в год (шт. готовых, без ЛПС)
+        castings_per_year = forms_per_year // in_form if in_form > 0 else 0
+
+        # Масса одной отливки (без ЛПС), кг
+        casting_mass = mass_lps / in_form if in_form > 0 else mass_lps
+
+        # Формируем объект CastingItem
+        try:
+            casting = CastingItem(
+                num=num,
+                name=name,
+                casting_mass_kg=casting_mass,
+                mass_with_lps_kg=mass_lps,
+                dimension1_mm=dim1,
+                dimension2_mm=dim2,
+                height_mm=height,
+                forms_per_year=forms_per_year,
+                castings_in_form=in_form,
+                castings_per_year=castings_per_year,
+                flask_l_mm=flask_l,
+                flask_w_mm=flask_w,
+                flask_h_mm=flask_h,
+                pour_mass_kg=pour_mass,
+                metal_mass_year_tons=metal_year_tons,
+                mix_volume_m3=mix_volume,
+                machine_type=machine,
+            )
+        except Exception as e:
+            self._warnings.append(
+                f"Строка {row_num} ({name}): ошибка создания объекта — {e}"
+            )
+            return (None, None)
+
+        # Строка для предпросмотра
+        preview_row = [
+            num, name, f"{mass_lps:.2f}",
+            f"Ø{dim1:.0f}" if dim2 is None else f"{dim1:.0f}×{dim2:.0f}",
+            f"{height:.0f}", forms_per_year, in_form,
+            f"{metal_year_tons:.2f}",
+            f"{flask_l:.0f}", f"{flask_w:.0f}", f"{flask_h:.0f}",
+            f"{pour_mass:.2f}", f"{metal_year_tons:.2f}",
+            f"{mix_volume:.3f}", "—", machine,
+        ]
+
+        return (casting, preview_row)

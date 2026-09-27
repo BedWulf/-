@@ -1,0 +1,401 @@
+{
+    "version": "1.1",
+    "last_updated": "2026-09-13",
+    "categories": [
+        {
+            "id": "steel",
+            "name": "Сталь литейная",
+            "description": "Углеродистые и низколегированные стали по ГОСТ 977-88"
+        },
+        {
+            "id": "cast_iron",
+            "name": "Серый чугун",
+            "description": "Серый чугун по ГОСТ 1412-85"
+        },
+        {
+            "id": "aluminum",
+            "name": "Алюминиевые сплавы",
+            "description": "Литейные алюминиевые сплавы по ГОСТ 2685-63 и ГОСТ 1583-93"
+        }
+    ],
+    "alloys": [
+        {
+            "id": "steel_20L",
+            "name": "20Л",
+            "gost": "ГОСТ 977-88",
+            "category": "steel",
+            "density_kg_m3": 7800,
+            "melting_temp_C": 1520,
+            "pouring_temp_C": 1600,
+            "shrinkage_pct": 2.0,
+            "burnout_pct": {
+                "C": 10,
+                "Si": 0,
+                "Mn": 10,
+                "P": 0,
+                "S": 5
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "arc_steel"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_steel",
+            "description": "Углеродистая сталь для отливок общего назначения"
+        },
+        {
+            "id": "steel_25L",
+            "name": "25Л",
+            "gost": "ГОСТ 977-88",
+            "category": "steel",
+            "density_kg_m3": 7800,
+            "melting_temp_C": 1510,
+            "pouring_temp_C": 1590,
+            "shrinkage_pct": 2.0,
+            "burnout_pct": {
+                "C": 10,
+                "Si": 0,
+                "Mn": 10,
+                "P": 0,
+                "S": 5
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "arc_steel"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_steel",
+            "description": "Сталь с повышенным содержанием углерода"
+        },
+        {
+            "id": "steel_35L",
+            "name": "35Л",
+            "gost": "ГОСТ 977-88",
+            "category": "steel",
+            "density_kg_m3": 7800,
+            "melting_temp_C": 1500,
+            "pouring_temp_C": 1580,
+            "shrinkage_pct": 2.0,
+            "burnout_pct": {
+                "C": 10,
+                "Si": 0,
+                "Mn": 10,
+                "P": 0,
+                "S": 5
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "arc_steel"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_steel",
+            "description": "Сталь для отливок повышенной прочности"
+        },
+        {
+            "id": "steel_45L",
+            "name": "45Л",
+            "gost": "ГОСТ 977-88",
+            "category": "steel",
+            "density_kg_m3": 7800,
+            "melting_temp_C": 1490,
+            "pouring_temp_C": 1570,
+            "shrinkage_pct": 2.0,
+            "burnout_pct": {
+                "C": 10,
+                "Si": 0,
+                "Mn": 10,
+                "P": 0,
+                "S": 5
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "arc_steel"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_steel",
+            "description": "Сталь с высоким содержанием углерода"
+        },
+        {
+            "id": "steel_110G13L",
+            "name": "110Г13Л",
+            "gost": "ГОСТ 977-88",
+            "category": "steel",
+            "density_kg_m3": 7800,
+            "melting_temp_C": 1480,
+            "pouring_temp_C": 1550,
+            "shrinkage_pct": 2.2,
+            "burnout_pct": {
+                "C": 10,
+                "Si": 0,
+                "Mn": 15,
+                "P": 0,
+                "S": 5
+            },
+            "recommended_furnace_types": [
+                "induction_crucible"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_steel",
+            "description": "Высокомарганцовистая износостойкая сталь"
+        },
+        {
+            "id": "steel_20X13L",
+            "name": "20Х13Л",
+            "gost": "ГОСТ 977-88",
+            "category": "steel",
+            "density_kg_m3": 7700,
+            "melting_temp_C": 1500,
+            "pouring_temp_C": 1580,
+            "shrinkage_pct": 2.0,
+            "burnout_pct": {
+                "C": 10,
+                "Si": 0,
+                "Mn": 10,
+                "P": 0,
+                "S": 5
+            },
+            "recommended_furnace_types": [
+                "induction_crucible"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_steel",
+            "description": "Хромистая нержавеющая сталь"
+        },
+        {
+            "id": "cast_iron_SCh10",
+            "name": "СЧ10",
+            "gost": "ГОСТ 1412-85",
+            "category": "cast_iron",
+            "density_kg_m3": 6900,
+            "melting_temp_C": 1150,
+            "pouring_temp_C": 1280,
+            "shrinkage_pct": 1.0,
+            "burnout_pct": {
+                "C": 0,
+                "Si": 10,
+                "Mn": 15
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "cupola_water_cooled"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_cast_iron",
+            "description": "Серый чугун минимальной прочности"
+        },
+        {
+            "id": "cast_iron_SCh15",
+            "name": "СЧ15",
+            "gost": "ГОСТ 1412-85",
+            "category": "cast_iron",
+            "density_kg_m3": 7100,
+            "melting_temp_C": 1180,
+            "pouring_temp_C": 1320,
+            "shrinkage_pct": 1.0,
+            "burnout_pct": {
+                "C": 0,
+                "Si": 10,
+                "Mn": 15
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "cupola_water_cooled"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_cast_iron",
+            "description": "Серый чугун для малонагруженных деталей"
+        },
+        {
+            "id": "cast_iron_SCh20",
+            "name": "СЧ20",
+            "gost": "ГОСТ 1412-85",
+            "category": "cast_iron",
+            "density_kg_m3": 7200,
+            "melting_temp_C": 1200,
+            "pouring_temp_C": 1350,
+            "shrinkage_pct": 0.9,
+            "burnout_pct": {
+                "C": 0,
+                "Si": 10,
+                "Mn": 15
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "cupola_water_cooled"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_cast_iron",
+            "description": "Серый чугун средней прочности"
+        },
+        {
+            "id": "cast_iron_SCh25",
+            "name": "СЧ25",
+            "gost": "ГОСТ 1412-85",
+            "category": "cast_iron",
+            "density_kg_m3": 7250,
+            "melting_temp_C": 1220,
+            "pouring_temp_C": 1370,
+            "shrinkage_pct": 0.9,
+            "burnout_pct": {
+                "C": 0,
+                "Si": 10,
+                "Mn": 15
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "cupola_water_cooled"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_cast_iron",
+            "description": "Серый чугун повышенной прочности"
+        },
+        {
+            "id": "cast_iron_SCh30",
+            "name": "СЧ30",
+            "gost": "ГОСТ 1412-85",
+            "category": "cast_iron",
+            "density_kg_m3": 7300,
+            "melting_temp_C": 1250,
+            "pouring_temp_C": 1400,
+            "shrinkage_pct": 0.8,
+            "burnout_pct": {
+                "C": 0,
+                "Si": 10,
+                "Mn": 15
+            },
+            "recommended_furnace_types": [
+                "induction_crucible",
+                "cupola_water_cooled"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_cast_iron",
+            "description": "Серый чугун высокой прочности"
+        },
+        {
+            "id": "cast_iron_SCh35",
+            "name": "СЧ35",
+            "gost": "ГОСТ 1412-85",
+            "category": "cast_iron",
+            "density_kg_m3": 7350,
+            "melting_temp_C": 1280,
+            "pouring_temp_C": 1420,
+            "shrinkage_pct": 0.8,
+            "burnout_pct": {
+                "C": 0,
+                "Si": 10,
+                "Mn": 15
+            },
+            "recommended_furnace_types": [
+                "induction_crucible"
+            ],
+            "recommended_molding_method": "machine_wet_sand",
+            "mix_composition_id": "EFS_cast_iron",
+            "description": "Серый чугун максимальной прочности"
+        },
+        {
+            "id": "aluminum_AL2",
+            "name": "АЛ2",
+            "gost": "ГОСТ 2685-63",
+            "category": "aluminum",
+            "density_kg_m3": 2700,
+            "melting_temp_C": 580,
+            "pouring_temp_C": 720,
+            "shrinkage_pct": 1.4,
+            "burnout_pct": {
+                "Si": 5,
+                "Mg": 15
+            },
+            "recommended_furnace_types": [
+                "gas_crucible",
+                "resistance_crucible"
+            ],
+            "recommended_molding_method": "machine_dry_sand",
+            "mix_composition_id": "EFS_aluminum",
+            "description": "Алюминиево-магниевый сплав"
+        },
+        {
+            "id": "aluminum_AL4",
+            "name": "АЛ4",
+            "gost": "ГОСТ 2685-63",
+            "category": "aluminum",
+            "density_kg_m3": 2700,
+            "melting_temp_C": 570,
+            "pouring_temp_C": 700,
+            "shrinkage_pct": 1.4,
+            "burnout_pct": {
+                "Si": 5,
+                "Mg": 15
+            },
+            "recommended_furnace_types": [
+                "gas_crucible",
+                "resistance_crucible"
+            ],
+            "recommended_molding_method": "machine_dry_sand",
+            "mix_composition_id": "EFS_aluminum",
+            "description": "Алюминиево-магниевый сплав с кремнием"
+        },
+        {
+            "id": "aluminum_AL9",
+            "name": "АЛ9",
+            "gost": "ГОСТ 2685-63",
+            "category": "aluminum",
+            "density_kg_m3": 2670,
+            "melting_temp_C": 570,
+            "pouring_temp_C": 700,
+            "shrinkage_pct": 1.4,
+            "burnout_pct": {
+                "Si": 5,
+                "Mg": 15
+            },
+            "recommended_furnace_types": [
+                "gas_crucible",
+                "resistance_crucible"
+            ],
+            "recommended_molding_method": "machine_dry_sand",
+            "mix_composition_id": "EFS_aluminum",
+            "description": "Алюминиево-кремниевый сплав (силумин)"
+        },
+        {
+            "id": "aluminum_AK12",
+            "name": "АК12",
+            "gost": "ГОСТ 1583-93",
+            "category": "aluminum",
+            "density_kg_m3": 2670,
+            "melting_temp_C": 570,
+            "pouring_temp_C": 700,
+            "shrinkage_pct": 1.4,
+            "burnout_pct": {
+                "Si": 5,
+                "Mg": 15
+            },
+            "recommended_furnace_types": [
+                "gas_crucible",
+                "resistance_crucible"
+            ],
+            "recommended_molding_method": "machine_dry_sand",
+            "mix_composition_id": "EFS_aluminum",
+            "description": "Литейный силумин (эвтектический)"
+        },
+        {
+            "id": "aluminum_AK5M",
+            "name": "АК5М",
+            "gost": "ГОСТ 1583-93",
+            "category": "aluminum",
+            "density_kg_m3": 2680,
+            "melting_temp_C": 560,
+            "pouring_temp_C": 690,
+            "shrinkage_pct": 1.3,
+            "burnout_pct": {
+                "Si": 5,
+                "Mg": 15
+            },
+            "recommended_furnace_types": [
+                "gas_crucible",
+                "resistance_crucible"
+            ],
+            "recommended_molding_method": "machine_dry_sand",
+            "mix_composition_id": "EFS_aluminum",
+            "description": "Алюминиево-кремниевый сплав с медью"
+        }
+    ]
+}

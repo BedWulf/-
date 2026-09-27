@@ -1,0 +1,505 @@
+{
+    "version": "1.0",
+    "last_updated": "2026-09-12",
+    "furnaces": [
+        {
+            "id": "IST-0.25",
+            "name": "ИСТ-0.25",
+            "type": "induction_crucible",
+            "manufacturer": "Электромаш",
+            "applicable_for": {
+                "materials": [
+                    "steel",
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 0.1,
+                    "max": 100
+                },
+                "production_scale": [
+                    "single",
+                    "small_series",
+                    "mass"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.25,
+                "productivity_t_h": 0.15,
+                "melt_time_h": 1.5,
+                "power_kw": 160,
+                "working_temp_C": 1650,
+                "lining": "acidic"
+            },
+            "description": "Малая индукционная тигельная печь для лабораторных и мелких серий"
+        },
+        {
+            "id": "IST-0.4",
+            "name": "ИСТ-0.4",
+            "type": "induction_crucible",
+            "manufacturer": "Электромаш",
+            "applicable_for": {
+                "materials": [
+                    "steel",
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 1,
+                    "max": 200
+                },
+                "production_scale": [
+                    "single",
+                    "small_series",
+                    "mass"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.4,
+                "productivity_t_h": 0.25,
+                "melt_time_h": 1.6,
+                "power_kw": 250,
+                "working_temp_C": 1650,
+                "lining": "acidic"
+            },
+            "description": "Индукционная печь для мелкого и среднего литья"
+        },
+        {
+            "id": "IST-1.0",
+            "name": "ИСТ-1.0",
+            "type": "induction_crucible",
+            "manufacturer": "Электромаш",
+            "applicable_for": {
+                "materials": [
+                    "steel",
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 10,
+                    "max": 1000
+                },
+                "production_scale": [
+                    "small_series",
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 1.0,
+                "productivity_t_h": 0.6,
+                "melt_time_h": 1.8,
+                "power_kw": 630,
+                "working_temp_C": 1650,
+                "lining": "acidic"
+            },
+            "description": "Стандартная индукционная печь для серийного производства"
+        },
+        {
+            "id": "IST-2.5",
+            "name": "ИСТ-2.5",
+            "type": "induction_crucible",
+            "manufacturer": "Электромаш",
+            "applicable_for": {
+                "materials": [
+                    "steel",
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 50,
+                    "max": 2500
+                },
+                "production_scale": [
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 2.5,
+                "productivity_t_h": 1.5,
+                "melt_time_h": 1.8,
+                "power_kw": 1600,
+                "working_temp_C": 1650,
+                "lining": "acidic"
+            },
+            "description": "Индукционная печь средней мощности"
+        },
+        {
+            "id": "IST-6M1",
+            "name": "ИСТ-6М1",
+            "type": "induction_crucible",
+            "manufacturer": "Электромаш",
+            "applicable_for": {
+                "materials": [
+                    "steel",
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 50,
+                    "max": 5000
+                },
+                "production_scale": [
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 6.0,
+                "productivity_t_h": 3.0,
+                "melt_time_h": 2.0,
+                "power_kw": 4000,
+                "working_temp_C": 1600,
+                "lining": "acidic"
+            },
+            "description": "Стандарт для сталелитейных цехов средней мощности (37 000 т/год)"
+        },
+        {
+            "id": "IST-10",
+            "name": "ИСТ-10",
+            "type": "induction_crucible",
+            "manufacturer": "Электромаш",
+            "applicable_for": {
+                "materials": [
+                    "steel",
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 100,
+                    "max": 10000
+                },
+                "production_scale": [
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 10.0,
+                "productivity_t_h": 5.0,
+                "melt_time_h": 2.0,
+                "power_kw": 6300,
+                "working_temp_C": 1600,
+                "lining": "acidic"
+            },
+            "description": "Крупная индукционная печь для массового производства"
+        },
+        {
+            "id": "DSP-1.5",
+            "name": "ДСП-1.5",
+            "type": "arc_steel",
+            "manufacturer": "Электросталь",
+            "applicable_for": {
+                "materials": [
+                    "steel"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 100,
+                    "max": 10000
+                },
+                "production_scale": [
+                    "mass"
+                ],
+                "recommended": false
+            },
+            "specs": {
+                "capacity_t": 1.5,
+                "productivity_t_h": 1.0,
+                "melt_time_h": 2.5,
+                "power_kw": 1250,
+                "working_temp_C": 1700,
+                "lining": "basic"
+            },
+            "description": "Дуговая сталеплавильная печь малой мощности"
+        },
+        {
+            "id": "DSP-3",
+            "name": "ДСП-3",
+            "type": "arc_steel",
+            "manufacturer": "Электросталь",
+            "applicable_for": {
+                "materials": [
+                    "steel"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 500,
+                    "max": 50000
+                },
+                "production_scale": [
+                    "mass"
+                ],
+                "recommended": false
+            },
+            "specs": {
+                "capacity_t": 3.0,
+                "productivity_t_h": 2.0,
+                "melt_time_h": 2.5,
+                "power_kw": 2500,
+                "working_temp_C": 1700,
+                "lining": "basic"
+            },
+            "description": "Дуговая сталеплавильная печь для крупных цехов"
+        },
+        {
+            "id": "DSP-5",
+            "name": "ДСП-5",
+            "type": "arc_steel",
+            "manufacturer": "Электросталь",
+            "applicable_for": {
+                "materials": [
+                    "steel"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 1000,
+                    "max": 100000
+                },
+                "production_scale": [
+                    "mass"
+                ],
+                "recommended": false
+            },
+            "specs": {
+                "capacity_t": 5.0,
+                "productivity_t_h": 3.5,
+                "melt_time_h": 2.5,
+                "power_kw": 4000,
+                "working_temp_C": 1700,
+                "lining": "basic"
+            },
+            "description": "Дуговая сталеплавильная печь большой мощности"
+        },
+        {
+            "id": "VPZh-1.5",
+            "name": "ВПЖ-1.5",
+            "type": "cupola_water_cooled",
+            "manufacturer": "Литмаш",
+            "applicable_for": {
+                "materials": [
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 5,
+                    "max": 3000
+                },
+                "production_scale": [
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 1.5,
+                "productivity_t_h": 4.0,
+                "melt_time_h": 0.5,
+                "power_kw": 0,
+                "working_temp_C": 1450,
+                "fuel": "coke",
+                "lining": "acidic"
+            },
+            "description": "Вагранка с водяным охлаждением для чугуна"
+        },
+        {
+            "id": "VPZh-3",
+            "name": "ВПЖ-3",
+            "type": "cupola_water_cooled",
+            "manufacturer": "Литмаш",
+            "applicable_for": {
+                "materials": [
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 50,
+                    "max": 10000
+                },
+                "production_scale": [
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 3.0,
+                "productivity_t_h": 8.0,
+                "melt_time_h": 0.5,
+                "power_kw": 0,
+                "working_temp_C": 1450,
+                "fuel": "coke",
+                "lining": "acidic"
+            },
+            "description": "Крупная вагранка с водяным охлаждением"
+        },
+        {
+            "id": "VPZh-5",
+            "name": "ВПЖ-5",
+            "type": "cupola_water_cooled",
+            "manufacturer": "Литмаш",
+            "applicable_for": {
+                "materials": [
+                    "cast_iron"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 100,
+                    "max": 20000
+                },
+                "production_scale": [
+                    "mass"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 5.0,
+                "productivity_t_h": 12.0,
+                "melt_time_h": 0.5,
+                "power_kw": 0,
+                "working_temp_C": 1450,
+                "fuel": "coke",
+                "lining": "acidic"
+            },
+            "description": "Производительная вагранка для массового чугунолитейного производства"
+        },
+        {
+            "id": "TGA-100",
+            "name": "ТГА-100",
+            "type": "gas_crucible",
+            "manufacturer": "Теплоприбор",
+            "applicable_for": {
+                "materials": [
+                    "aluminum"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 0.1,
+                    "max": 50
+                },
+                "production_scale": [
+                    "single",
+                    "small_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.1,
+                "productivity_t_h": 0.2,
+                "melt_time_h": 1.0,
+                "power_kw": 0,
+                "working_temp_C": 800,
+                "fuel": "natural_gas"
+            },
+            "description": "Газовая тигельная печь для мелких алюминиевых отливок"
+        },
+        {
+            "id": "TGA-200",
+            "name": "ТГА-200",
+            "type": "gas_crucible",
+            "manufacturer": "Теплоприбор",
+            "applicable_for": {
+                "materials": [
+                    "aluminum"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 0.5,
+                    "max": 200
+                },
+                "production_scale": [
+                    "small_series",
+                    "mass"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.2,
+                "productivity_t_h": 0.4,
+                "melt_time_h": 1.0,
+                "power_kw": 0,
+                "working_temp_C": 800,
+                "fuel": "natural_gas"
+            },
+            "description": "Газовая тигельная печь для алюминиевых сплавов"
+        },
+        {
+            "id": "TGA-500",
+            "name": "ТГА-500",
+            "type": "gas_crucible",
+            "manufacturer": "Теплоприбор",
+            "applicable_for": {
+                "materials": [
+                    "aluminum"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 5,
+                    "max": 500
+                },
+                "production_scale": [
+                    "mass",
+                    "large_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.5,
+                "productivity_t_h": 1.0,
+                "melt_time_h": 1.0,
+                "power_kw": 0,
+                "working_temp_C": 800,
+                "fuel": "natural_gas"
+            },
+            "description": "Крупная газовая тигельная печь для алюминия"
+        },
+        {
+            "id": "TS-150",
+            "name": "ТС-150",
+            "type": "resistance_crucible",
+            "manufacturer": "Теплоприбор",
+            "applicable_for": {
+                "materials": [
+                    "aluminum"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 0.1,
+                    "max": 100
+                },
+                "production_scale": [
+                    "single",
+                    "small_series"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.15,
+                "productivity_t_h": 0.3,
+                "melt_time_h": 1.2,
+                "power_kw": 80,
+                "working_temp_C": 800
+            },
+            "description": "Тигельная печь сопротивления для алюминия"
+        },
+        {
+            "id": "TS-300",
+            "name": "ТС-300",
+            "type": "resistance_crucible",
+            "manufacturer": "Теплоприбор",
+            "applicable_for": {
+                "materials": [
+                    "aluminum"
+                ],
+                "casting_mass_range_kg": {
+                    "min": 1,
+                    "max": 300
+                },
+                "production_scale": [
+                    "small_series",
+                    "mass"
+                ],
+                "recommended": true
+            },
+            "specs": {
+                "capacity_t": 0.3,
+                "productivity_t_h": 0.6,
+                "melt_time_h": 1.2,
+                "power_kw": 150,
+                "working_temp_C": 800
+            },
+            "description": "Тигельная печь сопротивления средней мощности"
+        }
+    ]
+}
